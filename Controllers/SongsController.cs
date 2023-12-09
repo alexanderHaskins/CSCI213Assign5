@@ -20,11 +20,24 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchartistID)
         {
-              return _context.Song != null ? 
-                          View(await _context.Song.ToListAsync()) :
-                          Problem("Entity set 'ModernSoftwareDevelopmentAssignment5Context.Song'  is null.");
+            //return _context.Song != null ? 
+            //View(await _context.Song.ToListAsync()) :
+            //Problem("Entity set 'ModernSoftwareDevelopmentAssignment5Context.Song'  is null.");
+
+            var showAll = from m in _context.Song
+                          select m;
+
+            if (!String.IsNullOrEmpty(SearchartistID))
+            {
+                int id = Convert.ToInt32(SearchartistID);
+                showAll = showAll.Where(s => s.artistID == (id));
+            }
+            
+
+            return View(await showAll.ToListAsync());
+
         }
 
         // GET: Songs/Details/5
