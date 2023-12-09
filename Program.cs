@@ -1,4 +1,9 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using ModernSoftwareDevelopmentAssignment5.Data;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<ModernSoftwareDevelopmentAssignment5Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ModernSoftwareDevelopmentAssignment5Context") ?? throw new InvalidOperationException("Connection string 'ModernSoftwareDevelopmentAssignment5Context' not found.")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
