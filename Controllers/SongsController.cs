@@ -20,24 +20,51 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index(string SearchartistID)
+        public async Task<IActionResult> Index(string SongArtist, string SearchString)
         {
             //return _context.Song != null ? 
             //View(await _context.Song.ToListAsync()) :
             //Problem("Entity set 'ModernSoftwareDevelopmentAssignment5Context.Song'  is null.");
 
-            var showAll = from m in _context.Song
-                          select m;
+            //var showAll = from m in _context.Song
+            //              select m;
 
-            if (!String.IsNullOrEmpty(SearchartistID))
-            {
-                int id = Convert.ToInt32(SearchartistID);
-                showAll = showAll.Where(s => s.artistID == (id));
+            //if (!String.IsNullOrEmpty(SearchartistID))
+            //{
+            //    int id = Convert.ToInt32(SearchartistID);
+            //    showAll = showAll.Where(s => s.artistID == (id));
+            //}
+
+
+            //return View(await showAll.ToListAsync());
+
+            if (_context.Song == null) {
+                return Problem("Entity set 'MvcMovieContext.Song'  is null.");
             }
-            
+            //Use LINQ to get a list of Artists
+            IQueryable<int> artistQuery = from m in _context.Song
+                                             orderby m.artistID
+                                             select m.artistID;
+            var songs = from m in _context.Song
+                        select m;
 
-            return View(await showAll.ToListAsync());
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                int id = Convert.ToInt32(SearchString);
+                songs = songs.Where(s => s.artistID == (id));
+            }
+            if (!string.IsNullOrEmpty(SongArtist))
+            {
+                int id = Convert.ToInt32(SongArtist);
+                songs = songs.Where(s => s.artistID == (id));
+            }
 
+            var songArtistVM = new SongArtistModel
+            {
+                Artists=new SelectList(await artistQuery.Distinct().ToListAsync()),
+                Songs= await songs.ToListAsync()
+            };
+            return View(songArtistVM);
         }
 
         // GET: Songs/Details/5
