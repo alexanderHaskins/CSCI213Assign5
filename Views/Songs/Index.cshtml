@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ModernSoftwareDevelopmentAssignment5.Models.SongArtistModel>
+﻿@model ModernSoftwareDevelopmentAssignment5.Models.SongArtistModel
 
 @{
     ViewData["Title"] = "Index";
@@ -11,11 +11,13 @@
 </p>
 <form asp-controller="Songs" asp-action="Index" method="get">
     <p>
-        <select asp-for="SongArtist" asp-items="Model.Artist">
+
+        <select asp-for="SongArtist" asp-items="Model.Artists">
             <option value="">All</option>
         </select>
 
         Title: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Filter" />
     </p>
 </form>
 
