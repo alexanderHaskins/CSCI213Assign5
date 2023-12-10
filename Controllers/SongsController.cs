@@ -20,7 +20,7 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index(string SongArtist, string SearchString)
+        public async Task<IActionResult> Index(string SongArtist)
         {
             //return _context.Song != null ? 
             //View(await _context.Song.ToListAsync()) :
@@ -48,11 +48,7 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
             var songs = from m in _context.Song
                         select m;
 
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                int id = Convert.ToInt32(SearchString);
-                songs = songs.Where(s => s.artistID == (id));
-            }
+            
             if (!string.IsNullOrEmpty(SongArtist))
             {
                 int id = Convert.ToInt32(SongArtist);
