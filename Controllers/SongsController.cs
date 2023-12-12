@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ModernSoftwareDevelopmentAssignment5.Data;
 using ModernSoftwareDevelopmentAssignment5.Models;
+using NuGet.Protocol.Plugins;
 
 namespace ModernSoftwareDevelopmentAssignment5.Controllers
 {
@@ -20,7 +22,7 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
         }
 
         // GET: Songs
-        public async Task<IActionResult> Index(string SongArtist, string SearchString)
+        public async Task<IActionResult> Index(string SongArtist)
         {
             //return _context.Song != null ? 
             //View(await _context.Song.ToListAsync()) :
@@ -39,23 +41,25 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
             //return View(await showAll.ToListAsync());
 
             if (_context.Song == null) {
-                return Problem("Entity set 'MvcMovieContext.Song'  is null.");
+                return Problem("Entity set 'ModernSoftwareDevelopmentAssignment5.Song'  is null.");
             }
             //Use LINQ to get a list of Artists
-            IQueryable<int> artistQuery = from m in _context.Song
-                                             orderby m.artistID
-                                             select m.artistID;
+           // IQueryable<int> artistQuery = from m in _context.Song
+            //                                 orderby m.artistID
+             //                                select m.artistID;
+            IQueryable<Artist> artistQuery = from m in _context.Artist
+                                            orderby m.Id
+                                            select m;
             var songs = from m in _context.Song
                         select m;
-
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                int id = Convert.ToInt32(SearchString);
-                songs = songs.Where(s => s.artistID == (id));
-            }
+            
+            
             if (!string.IsNullOrEmpty(SongArtist))
             {
-                int id = Convert.ToInt32(SongArtist);
+                IQueryable<int> artistID=from m in _context.Artist
+                                         where m.Name == SongArtist
+                                         select m.Id;
+                int id=artistID.FirstOrDefault();
                 songs = songs.Where(s => s.artistID == (id));
             }
 
@@ -64,6 +68,8 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
                 Artists=new SelectList(await artistQuery.Distinct().ToListAsync()),
                 Songs= await songs.ToListAsync()
             };
+            Console.WriteLine("Behold:");
+            Console.WriteLine(SongArtist);
             return View(songArtistVM);
         }
 
