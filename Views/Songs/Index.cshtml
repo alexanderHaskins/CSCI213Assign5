@@ -16,9 +16,12 @@
 </p>
 
 
+
 <form asp-controller="Songs" asp-action="Index" method="get">
     <p>
-
+        <select asp-for="selectedGenre" asp-items="Model.Genres">
+            <option value="">All</option>
+        </select>
         <select asp-for="SongArtist" asp-items="Model.Artists">
             <option value="">All</option>
         </select>
