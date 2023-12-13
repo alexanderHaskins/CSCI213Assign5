@@ -6,12 +6,11 @@ namespace ModernSoftwareDevelopmentAssignment5
     {
         public Order() { }
 
-        List<Item> itemList;
+        List<Item> itemList = new List<Item>();
 
-        public void addItem(int id, int num)
+        public void addItem(int id, int num, decimal price)
         {
-            //Attach price to database
-            decimal price = 0;
+
             bool added = false;
             if(itemList.Count > 0)
             {
@@ -42,6 +41,14 @@ namespace ModernSoftwareDevelopmentAssignment5
                         itemList.Remove(i);
                     }
                 }
+            }
+        }
+
+        public void deleteAll()
+        {
+            foreach (Item i in itemList)
+            {
+                itemList.Remove(i);
             }
         }
 
