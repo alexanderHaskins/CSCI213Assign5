@@ -21,6 +21,8 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
             _context = context;
         }
 
+        Order myOrder = new Order();
+
         // GET: Songs
         public async Task<IActionResult> Index(string SongArtist)
         {
@@ -205,5 +207,31 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
         {
           return (_context.Song?.Any(e => e.ID == id)).GetValueOrDefault();
         }
+
+        //Add song to order
+        [HttpPost]
+        public void AddToCart(Song song)
+        {
+            myOrder.addItem(song.ID, 1, song.price);
+
+        }
+
+        //Get order price
+        [HttpPost]
+        public decimal GetPrice(Song song)
+        {
+            return myOrder.getTotalPrice();
+
+        }
+
+        //Clear order
+        [HttpPost]
+        public void ClearOrder(Song song)
+        {
+            myOrder.deleteAll();
+
+        }
+
+        
     }
 }

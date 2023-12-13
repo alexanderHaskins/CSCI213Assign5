@@ -8,7 +8,14 @@
 
 <p>
     <a asp-action="Create">Create New</a>
+    
 </p>
+
+<p>
+    <a asp-action="ProceedToPay">Proceed To Pay</a>
+</p>
+
+
 <form asp-controller="Songs" asp-action="Index" method="get">
     <p>
 
@@ -51,6 +58,7 @@
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="AddToCart" asp-route-id="@item.ID">AddToCart</a>
             </td>
         </tr>
 }
