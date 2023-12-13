@@ -9,5 +9,7 @@ namespace ModernSoftwareDevelopmentAssignment5.Models
         public SelectList? Artists { get; set; }
         public string? SongArtist { get; set; }
         public string? SearchString { get; set; }
+        public SelectList? Genres { get; set; }
+        public string? selectedGenre { get; set; }
     }
 }

@@ -24,38 +24,38 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
         Order myOrder = new Order();
 
         // GET: Songs
-        public async Task<IActionResult> Index(string SongArtist)
+        public async Task<IActionResult> Index(string selectedGenre,string SongArtist)
         {
-            //return _context.Song != null ? 
-            //View(await _context.Song.ToListAsync()) :
-            //Problem("Entity set 'ModernSoftwareDevelopmentAssignment5Context.Song'  is null.");
-
-            //var showAll = from m in _context.Song
-            //              select m;
-
-            //if (!String.IsNullOrEmpty(SearchartistID))
-            //{
-            //    int id = Convert.ToInt32(SearchartistID);
-            //    showAll = showAll.Where(s => s.artistID == (id));
-            //}
-
-
-            //return View(await showAll.ToListAsync());
-
+            Console.WriteLine(selectedGenre);
+            Console.WriteLine(SongArtist);
             if (_context.Song == null) {
                 return Problem("Entity set 'ModernSoftwareDevelopmentAssignment5.Song'  is null.");
             }
-            //Use LINQ to get a list of Artists
-           // IQueryable<int> artistQuery = from m in _context.Song
-            //                                 orderby m.artistID
-             //                                select m.artistID;
-            IQueryable<Artist> artistQuery = from m in _context.Artist
+            if (_context.Artist == null)
+            {
+                return Problem("Entity set 'ModernSoftwareDevelopmentAssignment5.Artist'  is null.");
+            }
+            IQueryable<string> genreQuery = from m in _context.Artist
                                             orderby m.Id
+                                            select m.Genre;
+
+            IQueryable<Artist> artistQuery = from m in _context.Artist
+                                             orderby m.Id
                                             select m;
             var songs = from m in _context.Song
                         select m;
-            
-            
+            var artists=from m in _context.Artist
+                        select m;
+
+            if (!string.IsNullOrEmpty(selectedGenre))
+            {
+                artistQuery = from m in _context.Artist
+                              where m.Genre == selectedGenre
+                              orderby m.Id
+                              select m;
+                string? Genre = genreQuery.FirstOrDefault();
+                artists = artists.Where(s => s.Genre == selectedGenre);
+            }
             if (!string.IsNullOrEmpty(SongArtist))
             {
                 IQueryable<int> artistID=from m in _context.Artist
@@ -63,20 +63,56 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
                                          select m.Id;
                 int id=artistID.FirstOrDefault();
                 songs = songs.Where(s => s.artistID == (id));
+                //Console.WriteLine("Behold:");
+                //Console.WriteLine(SongArtist);
             }
 
             var songArtistVM = new SongArtistModel
             {
-                Artists=new SelectList(await artistQuery.Distinct().ToListAsync()),
+                Genres = new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Artists =new SelectList(artists),
                 Songs= await songs.ToListAsync()
             };
-            Console.WriteLine("Behold:");
-            Console.WriteLine(SongArtist);
+            //Console.WriteLine("Behold:");
+            //Console.WriteLine(SongArtist);
             return View(songArtistVM);
         }
 
-        // GET: Songs/Details/5
-        public async Task<IActionResult> Details(int? id)
+        //GET:Artists within a specific genre
+        public async Task<IActionResult> SetGenre(string filterGenre)
+        {
+            if (_context.Song == null)
+            {
+                return Problem("Entity set 'ModernSoftwareDevelopmentAssignment5.Song'  is null.");
+            }
+            if (_context.Artist == null)
+            {
+                return Problem("Entity set 'ModernSoftwareDevelopmentAssignment5.Artist'  is null.");
+            }
+            IQueryable<string> genreQuery= from m in _context.Artist
+                                       orderby m.Id
+                                       select m.Genre;
+            var songs = from m in _context.Song
+                        select m;
+            if (!string.IsNullOrEmpty(filterGenre)) {
+                
+            }
+            IQueryable<Artist> artistQuery = from m in _context.Artist
+                                             orderby m.Id
+                                             select m;
+            var songArtistVM = new SongArtistModel
+            {
+                Genres=new SelectList(await genreQuery.Distinct().ToListAsync()),
+                Artists = new SelectList(await artistQuery.Distinct().ToListAsync()),
+                Songs = await songs.ToListAsync()
+            };
+            //Console.WriteLine("Behold:");
+            //Console.WriteLine(SongArtist);
+            return View(songArtistVM);
+        }
+
+            // GET: Songs/Details/5
+            public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Song == null)
             {
