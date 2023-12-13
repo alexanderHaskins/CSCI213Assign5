@@ -1,4 +1,25 @@
 ﻿@model ModernSoftwareDevelopmentAssignment5.Models.Song
+@using ModernSoftwareDevelopmentAssignment5.Controllers;
+
 @{
     ViewData["Title"] = "ProceedToPay";
 }
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ClearOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            
+            <div class="form-group">
+                <input type="submit" value=null class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
