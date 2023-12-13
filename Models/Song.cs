@@ -6,5 +6,7 @@
         public required string Name { get; set;}
         public required int artistID { get; set; }
         public required decimal price { get; set; }
+
+        
     }
 }

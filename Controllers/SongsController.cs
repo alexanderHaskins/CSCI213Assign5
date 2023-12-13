@@ -246,15 +246,18 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
 
         //Add song to order
         [HttpPost]
-        public void AddToCart(Song song)
+        public void AddToCart(int ID, decimal price)
         {
-            myOrder.addItem(song.ID, 1, song.price);
+            
+            myOrder.addItem(ID, 1, price);
 
         }
 
+        
+        
         //Get order price
         [HttpPost]
-        public decimal GetPrice(Song song)
+        public decimal GetPrice()
         {
             return myOrder.getTotalPrice();
 
@@ -262,7 +265,7 @@ namespace ModernSoftwareDevelopmentAssignment5.Controllers
 
         //Clear order
         [HttpPost]
-        public void ClearOrder(Song song)
+        public void ClearOrder()
         {
             myOrder.deleteAll();
 

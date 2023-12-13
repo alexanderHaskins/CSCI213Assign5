@@ -12,9 +12,10 @@ namespace ModernSoftwareDevelopmentAssignment5
         {
 
             bool added = false;
-            if(itemList.Count > 0)
+            if (itemList.Count > 0)
             {
-                foreach(Item i in itemList) {
+                foreach (Item i in itemList)
+                {
                     if (i.getID() == id)
                     {
                         i.addAmount(num);
@@ -22,17 +23,17 @@ namespace ModernSoftwareDevelopmentAssignment5
                     }
                 }
             }
-            if(added)
+            if (added == false)
             {
                 Item temp = new Item(id, num, price);
                 itemList.Add(temp);
             }
-            
+
         }
 
         public void deleteItem(int id)
         {
-            if(itemList.Count > 0)
+            if (itemList.Count > 0)
             {
                 foreach (Item i in itemList)
                 {
@@ -54,7 +55,7 @@ namespace ModernSoftwareDevelopmentAssignment5
 
         public decimal getTotalPrice()
         {
-            if(itemList.Count > 0)
+            if (itemList.Count > 0)
             {
                 decimal total = 0;
                 foreach (Item i in itemList)
